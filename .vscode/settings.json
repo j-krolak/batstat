@@ -1,0 +1,17 @@
+{
+  "files.associations": {
+    "file_utils.h": "c",
+    "unistd.h": "c",
+    "battery_history.h": "c",
+    "concepts": "c",
+    "cstdio": "c",
+    "type_traits": "c",
+    "new": "c",
+    "typeinfo": "c",
+    "bit": "c",
+    "stdlib.h": "c",
+    "cmath": "c",
+    "compare": "c",
+    "limits": "c"
+  }
+}
