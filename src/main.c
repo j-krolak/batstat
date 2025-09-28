@@ -6,6 +6,7 @@
 #include "battery.h"
 #include "battery_history.h"
 #include "time_utils.h"
+#include "config.h"
 
 void run_service();
 void run_ctl();
@@ -30,6 +31,7 @@ int main(int argc, char *argv[]) {
 }
 
 void run_service() {
+    printf("Service");
     BatteryHistory history;
     BatterHistory_Init(&history, true);
 
@@ -39,8 +41,11 @@ void run_service() {
         return;
     }
 
+    Config config;
+    Config_Init(&config);
+
     Battery battery;
-    Battery_Init(&battery);
+    Battery_Init(&battery, &config);
     Battery_UpdateCurrentEnergy(&battery);
     BatteryHistory_Write(&battery);
 }

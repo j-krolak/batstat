@@ -13,5 +13,3 @@ enum SectionType {
 };
 
 int Config_Init(Config*);
-
-void create_config_file();

@@ -1,6 +1,8 @@
 #include "file_utils.h"
 
 #include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
 
 ssize_t read_file(char* buf, ssize_t size, const char* file) {
     const int fd = open(file, O_RDONLY);
@@ -60,4 +62,11 @@ int copy_file(const char *inputFile, const char *outputFile) {
     fclose(src);
     fclose(dst);
     return 0;
+}
+
+char* concat_paths(char* a, char* b) {
+    char* fullPath = malloc(strlen(a) + strlen(b));
+    strcpy(fullPath, a);
+    strcat(fullPath, b);
+    return fullPath;
 }

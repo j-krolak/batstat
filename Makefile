@@ -8,7 +8,7 @@ DATA_DIR =/var/log/batstat
 SRCS = $(wildcard src/*.c)
 OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS))
 
-all:  install | $(TARGET)
+all: $(TARGET)
 
 $(TARGET): $(OBJS) 
 	gcc -o $(TARGET) $(OBJS)

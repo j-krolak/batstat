@@ -1,6 +1,7 @@
 #include "config.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "file_utils.h"
@@ -38,14 +39,12 @@ int Config_Init(Config *conf) {
                     size_t i = strcspn(line, "\n");
                     if(i < strlen(line))
                         line[i] = '\0';
-                    conf->batteryPath = line + pathPrefixLen;
+                        
+                    char *batterPath = line + pathPrefixLen;
+                    conf->batteryPath = malloc(strlen(batterPath));
+                    strcpy(conf->batteryPath, batterPath);
                 }
                 break;
         }
     }
-}
-
-
-void create_config_file() {
-
 }
