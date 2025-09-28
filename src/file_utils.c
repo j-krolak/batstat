@@ -29,3 +29,35 @@ long get_size_of_file(FILE *file) {
     fseek(file, 0, SEEK_SET);
     return size;
 }
+
+int copy_file(const char *inputFile, const char *outputFile) {
+    FILE *src = fopen(inputFile, "rb");
+    if(!src) {
+        perror("Failed to open source file");
+        return -1;
+    }
+
+    FILE *dst = fopen(outputFile, "w+b");
+    if(!dst) {
+        perror("Failed to open/create destination file");
+        return -1;
+    }
+    char buffer[256];
+    size_t n;
+    while((n = fread(buffer, 1, sizeof(buffer), src)) > 0) {
+        if(fwrite(buffer, 1, n, src) != n) {
+            perror("Write to destination error");
+            fclose(src);
+            fclose(dst);
+            return -1;
+        } 
+    }
+
+    if(ferror(src)) {
+        perror("Read error");
+    }
+
+    fclose(src);
+    fclose(dst);
+    return 0;
+}

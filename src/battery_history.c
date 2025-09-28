@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include "file_utils.h"
-#define BATTERY_HISTORY_FILE "battery_capacity_history.bin"
+#define BATTERY_HISTORY_FILE "/var/log/batstat/battery_capacity_history.bin"
 
 void BatterHistory_Init(BatteryHistory *self, bool loadOnlyLastRecord) {
     FILE *fp = fopen(BATTERY_HISTORY_FILE, "rb");

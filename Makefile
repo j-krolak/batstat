@@ -1,31 +1,30 @@
-SERVICE_TARGET = batterystats.service
-CLI_TARGET = batterystats
+TARGET = batstat
+
+EXEC_PATH = /usr/bin
+CONFIG_DIR = /etc/batstat
+UNIT_DIR =/etc/systemd/system
+DATA_DIR =/var/log/batstat
 
 SRCS = $(wildcard src/*.c)
-OBJS = $(patsubst src/%.c,build/%.o,$(SRCS))
+OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS))
 
-SERVICE_OBJS = $(filter-out build/main.o, $(OBJS))
-CLI_OBJS = $(filter-out build/service.o, $(OBJS))
+all:  install | $(TARGET)
 
+$(TARGET): $(OBJS) 
+	gcc -o $(TARGET) $(OBJS)
 
-all: $(SERVICE_TARGET) $(CLI_TARGET)
-
-$(SERVICE_TARGET): $(SERVICE_OBJS) 
-	gcc -o $(SERVICE_TARGET) $(SERVICE_OBJS)
-
-
-$(CLI_TARGET): $(CLI_OBJS) 
-	gcc -o $(CLI_TARGET) $(CLI_OBJS)
-
-
-build/%.o: src/%.c | build
+obj/%.o: src/%.c | obj
 	gcc -c $< -o $@
 
-
 # Ensure obj directory exists
-build:
-	mkdir -p build
+obj:
+	mkdir -p obj
 
+install:
+	install -Dm755 data/config.conf $(DESTDIR)$(CONFIG_DIR)/config.conf
+	mkdir -p $(DESTDIR)$(DATA_DIR)
+	install -Dm755 data/batstat.service $(DESTDIR)$(UNIT_DIR)/batstat.service
+	install -Dm755 $(TARGET) $(DESTDIR)$(EXEC_PATH)/$(TARGET)
 
 clean:
 	rm -f $(OBJS) $(TARGET)
