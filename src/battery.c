@@ -21,3 +21,14 @@ void Battery_UpdateCurrentEnergy(Battery *self) {
     free(buff);
     free(capacityPath);
 }
+
+void Battery_UpdateEnergyDesign(Battery *self) {
+    char* buff = malloc(32);
+    char* capacityPath = concat_paths(self->config->batteryPath, "/energy_full_design");
+    read_file(buff, 32,capacityPath);
+    self->energyDesign = strtoll(buff, NULL, 10);
+
+    free(buff);
+    free(capacityPath);
+}
+

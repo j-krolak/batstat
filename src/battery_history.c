@@ -5,7 +5,7 @@
 #include "file_utils.h"
 #define BATTERY_HISTORY_FILE "/var/log/batstat/battery_capacity_history.bin"
 
-void BatterHistory_Init(BatteryHistory *self, bool loadOnlyLastRecord) {
+void BatteryHistory_Init(BatteryHistory *self, bool loadOnlyLastRecord) {
     FILE *fp = fopen(BATTERY_HISTORY_FILE, "rb");
     if(!fp) {
         self->size = 0;

@@ -19,5 +19,5 @@ struct BatteryHistory {
 };
 
 
-void BatterHistory_Init(BatteryHistory*, bool loadOnlyLastRecord);
+void BatteryHistory_Init(BatteryHistory*, bool loadOnlyLastRecord);
 void BatteryHistory_Write(Battery*);

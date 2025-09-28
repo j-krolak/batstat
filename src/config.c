@@ -8,18 +8,19 @@
 
 #define CONFIG_PATH "/etc/batstat/config.conf"  
 
-int Config_Init(Config *conf) {
+int Config_Init(Config *conf, bool log) {
     
     conf->batteryPath = "/sys/class/power_supply/BAT0";        
     FILE *f = fopen(CONFIG_PATH, "r");
 
 
     if(!f) {
-        printf("Config file not founded.\n");
+        if(log)
+            printf("Config file not founded.\n");
         return 0;
     }
-
-    printf("Config file founded.\n");
+    if(log)
+        printf("Config file founded.\n");
     char line[256];
     char *n;
     SectionType currentSection = SectionNone;

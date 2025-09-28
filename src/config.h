@@ -12,4 +12,4 @@ enum SectionType {
     SectionBattery
 };
 
-int Config_Init(Config*);
+int Config_Init(Config* conf, bool log);

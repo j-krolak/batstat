@@ -9,7 +9,7 @@
 #include "config.h"
 
 void run_service();
-void run_ctl();
+void run_cli();
 
 int main(int argc, char *argv[]) {
     int opt;
@@ -26,14 +26,14 @@ int main(int argc, char *argv[]) {
                 return 0;
         }
     }
-    run_ctl(); 
+
+    run_cli(); 
     return 0;
 }
 
 void run_service() {
-    printf("Service");
     BatteryHistory history;
-    BatterHistory_Init(&history, true);
+    BatteryHistory_Init(&history, true);
 
     time_t now = time(NULL);
 
@@ -42,7 +42,7 @@ void run_service() {
     }
 
     Config config;
-    Config_Init(&config);
+    Config_Init(&config, true);
 
     Battery battery;
     Battery_Init(&battery, &config);
@@ -50,13 +50,21 @@ void run_service() {
     BatteryHistory_Write(&battery);
 }
 
-void run_ctl() {
+void run_cli() {
     BatteryHistory history;
-    BatterHistory_Init(&history, true);
+    BatteryHistory_Init(&history, true);
 
+    Config config;
+    Config_Init(&config, false);
+
+    Battery battery;
+    Battery_Init(&battery, &config);
+    Battery_UpdateEnergyDesign(&battery);
 
     for(long i = 0; i < history.size;i++) {
         time_t * p = &history.records[i].timestamp;
-        printf("%.2f Wh %s", (double)(history.records[i].energyFull)/1e6,ctime(p));
+        double energyFull = (double) history.records[i].energyFull;
+        printf("%.2f%% %.2f Wh %s", (energyFull/(double)battery.energyDesign), (double)(energyFull)/1e6,ctime(p));
+        
     }
 }
