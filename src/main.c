@@ -10,25 +10,32 @@
 #include "graph.h"
 
 void run_service();
-void run_cli();
+void run_cli(unsigned char flags);
 
 int main(int argc, char *argv[]) {
     int opt;
     char *config_path = NULL;
     static struct option long_opts[] = {
         {"service", no_argument, 0, 's'},
+        {"graph", no_argument, 0, 'g'},
         {0,0,0,0}
+
     };
 
-    while((opt = getopt_long(argc, argv, "s", long_opts, NULL)) != -1) {
+    char flags = 0;
+    while((opt = getopt_long(argc, argv, "sg", long_opts, NULL)) != -1) {
         switch(opt) {
             case 's':
                 run_service();
                 return 0;
+            case 'g':
+                flags |= 0b1;
+                break;
         }
     }
+  
 
-    run_cli(); 
+    run_cli(flags); 
     return 0;
 }
 
@@ -51,7 +58,7 @@ void run_service() {
     BatteryHistory_Write(&battery);
 }
 
-void run_cli() {
+void run_cli(unsigned char flags) {
     BatteryHistory history;
     BatteryHistory_Init(&history, false);
 
@@ -61,19 +68,24 @@ void run_cli() {
     Battery battery;
     Battery_Init(&battery, &config);
     Battery_UpdateEnergyDesign(&battery);
+    Point *points;
+    if(flags & 0b1)
+        points = malloc( history.size * sizeof(Point));
 
-    Point *points = malloc( history.size * sizeof(Point));
-
-    for(long i = 0; i < history.size;i++) {
+    printf("ratio  r_cap d_cap    date\n");
+    for(long i = history.size - 1; i >= 0;i--) {
         time_t * p = &history.records[i].timestamp;
         double energyFull = (double) history.records[i].energyFull;
-        double val = (energyFull/(double)battery.energyDesign);
-        printf("%.2f%% %.2f Wh %s", val, (double)(energyFull)/1e6,ctime(p));
-        struct tm *lt = localtime(p);
-        points[i].x =  lt->tm_mday;
-        points[i].y =  (int)(val*100);
-    }
+        double val = (energyFull/(double)battery.energyDesign) * 100;
+        printf("%4.2f%% %5.2f %5.2f Wh %s", val, (double)(energyFull)/1e6,(double)battery.energyDesign/1e6, ctime(p));
+        if(flags & 0b1) {
+            struct tm *lt = localtime(p);
+            points[i].x = lt->tm_year * 365+lt->tm_yday;
+            points[i].y =  (int)val;
+        }
 
-    print_graph(points, history.size, 80, 20, 0, 100);
+    }
+    if(flags & 0b1)
+        print_graph(points, history.size, 80, 20, 0, 100);
 
 }
