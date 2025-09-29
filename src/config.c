@@ -41,9 +41,9 @@ int Config_Init(Config *conf, bool log) {
                     if(i < strlen(line))
                         line[i] = '\0';
                         
-                    char *batterPath = line + pathPrefixLen;
-                    conf->batteryPath = malloc(strlen(batterPath));
-                    strcpy(conf->batteryPath, batterPath);
+                    char *batteryPath = line + pathPrefixLen;
+                    conf->batteryPath = malloc(strlen(batteryPath));
+                    strcpy(conf->batteryPath, batteryPath);
                 }
                 break;
         }

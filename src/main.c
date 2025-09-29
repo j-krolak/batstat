@@ -7,6 +7,7 @@
 #include "battery_history.h"
 #include "time_utils.h"
 #include "config.h"
+#include "graph.h"
 
 void run_service();
 void run_cli();
@@ -52,7 +53,7 @@ void run_service() {
 
 void run_cli() {
     BatteryHistory history;
-    BatteryHistory_Init(&history, true);
+    BatteryHistory_Init(&history, false);
 
     Config config;
     Config_Init(&config, false);
@@ -61,10 +62,18 @@ void run_cli() {
     Battery_Init(&battery, &config);
     Battery_UpdateEnergyDesign(&battery);
 
+    Point *points = malloc( history.size * sizeof(Point));
+
     for(long i = 0; i < history.size;i++) {
         time_t * p = &history.records[i].timestamp;
         double energyFull = (double) history.records[i].energyFull;
-        printf("%.2f%% %.2f Wh %s", (energyFull/(double)battery.energyDesign), (double)(energyFull)/1e6,ctime(p));
-        
+        double val = (energyFull/(double)battery.energyDesign);
+        printf("%.2f%% %.2f Wh %s", val, (double)(energyFull)/1e6,ctime(p));
+        struct tm *lt = localtime(p);
+        points[i].x =  lt->tm_mday;
+        points[i].y =  (int)(val*100);
     }
+
+    print_graph(points, history.size, 80, 20, 0, 100);
+
 }

@@ -41,6 +41,7 @@ void BatteryHistory_Write(Battery *battery) {
     BatterHistoryRecord record = {battery->energyFull, timestamp};
 
     FILE *fp = fopen(BATTERY_HISTORY_FILE, "ab");
+
     if(!fp) {
         perror("Failed to open file");
         return;
