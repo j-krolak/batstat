@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fcntl.h>
+#include <stdio.h>
 
 ssize_t read_file(char* buf, ssize_t size, const char* file) {
     const int fd = open(file, O_RDONLY);
@@ -47,7 +49,7 @@ int copy_file(const char *inputFile, const char *outputFile) {
     char buffer[256];
     size_t n;
     while((n = fread(buffer, 1, sizeof(buffer), src)) > 0) {
-        if(fwrite(buffer, 1, n, src) != n) {
+        if(fwrite(buffer, 1, n, dst) != n) {
             perror("Write to destination error");
             fclose(src);
             fclose(dst);
@@ -65,7 +67,7 @@ int copy_file(const char *inputFile, const char *outputFile) {
 }
 
 char* concat_paths(char* a, char* b) {
-    char* fullPath = malloc(strlen(a) + strlen(b));
+    char* fullPath = malloc(strlen(a) + strlen(b) + 1);
     strcpy(fullPath, a);
     strcat(fullPath, b);
     return fullPath;

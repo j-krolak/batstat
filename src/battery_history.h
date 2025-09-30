@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 typedef struct BatteryHistory BatteryHistory;
-typedef struct BatteryHistoryRecord BatterHistoryRecord;
+typedef struct BatteryHistoryRecord BatteryHistoryRecord;
 
 struct BatteryHistoryRecord  {
     long long energyFull;  
@@ -14,7 +14,7 @@ struct BatteryHistoryRecord  {
 };
 
 struct BatteryHistory {
-    BatterHistoryRecord *records;
+    BatteryHistoryRecord *records;
     long size;
 };
 

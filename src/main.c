@@ -14,7 +14,6 @@ void run_cli(unsigned char flags);
 
 int main(int argc, char *argv[]) {
     int opt;
-    char *config_path = NULL;
     static struct option long_opts[] = {
         {"service", no_argument, 0, 's'},
         {"graph", no_argument, 0, 'g'},

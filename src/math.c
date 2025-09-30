@@ -15,7 +15,7 @@ int abs(int a) {
 int count_digits(int a) {
     int res = 1;
     a = abs(a);
-    while(a = a/10)
+    while((a = (a/10)))
         res++;
     
     return res;

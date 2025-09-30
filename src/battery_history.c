@@ -13,16 +13,16 @@ void BatteryHistory_Init(BatteryHistory *self, bool loadOnlyLastRecord) {
     }
 
     if(loadOnlyLastRecord) {
-        if(get_size_of_file(fp) < sizeof(BatterHistoryRecord)) {
+        if((unsigned long)get_size_of_file(fp) < sizeof(BatteryHistoryRecord)) {
             self->size = 0; 
             fclose(fp);
             return;
         }
 
-        fseek(fp, -(long)sizeof(BatterHistoryRecord), SEEK_END);
-        self->records = malloc(sizeof(BatterHistoryRecord));
+        fseek(fp, -(long)sizeof(BatteryHistoryRecord), SEEK_END);
+        self->records = malloc(sizeof(BatteryHistoryRecord));
         self->size = 1;
-        fread(self->records, sizeof(BatterHistoryRecord), 1, fp);
+        fread(self->records, sizeof(BatteryHistoryRecord), 1, fp);
 
         fclose(fp);
         return;
@@ -30,7 +30,7 @@ void BatteryHistory_Init(BatteryHistory *self, bool loadOnlyLastRecord) {
 
     long size = get_size_of_file(fp);
     self->records = malloc(size);
-    self->size = size/sizeof(BatterHistoryRecord);
+    self->size = size/sizeof(BatteryHistoryRecord);
     fread(self->records, size, 1, fp);
 
     fclose(fp);
@@ -38,7 +38,7 @@ void BatteryHistory_Init(BatteryHistory *self, bool loadOnlyLastRecord) {
 
 void BatteryHistory_Write(Battery *battery) {
     time_t timestamp = time(NULL);
-    BatterHistoryRecord record = {battery->energyFull, timestamp};
+    BatteryHistoryRecord record = {battery->energyFull, timestamp};
 
     FILE *fp = fopen(BATTERY_HISTORY_FILE, "ab");
 
@@ -47,6 +47,6 @@ void BatteryHistory_Write(Battery *battery) {
         return;
     }
 
-    fwrite(&record, sizeof(BatterHistoryRecord), 1, fp);
+    fwrite(&record, sizeof(BatteryHistoryRecord), 1, fp);
     fclose(fp);
 }

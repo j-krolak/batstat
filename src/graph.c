@@ -20,7 +20,7 @@ void print_graph(Point points[], size_t size, int width, int height, int minimal
     size_t bitmap_size = (width*height)/8;
     unsigned char *bitmap = calloc(bitmap_size, 1);
    
-    for(int i = 0; i < size; i++) {
+    for(size_t i = 0; i < size; i++) {
         int normalizedY = (int)((double)(points[i].y - minimalY)/(double)(max(maximalY-minimalY,1))*(double)(height-1));
         int normalizedX = (int)((double)(points[i].x - minimalX)/(double)(max(maximalX-minimalX, 1))*(double)(width-1));
         int index = (height-normalizedY-1) * (width/8) + normalizedX/8;

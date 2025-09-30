@@ -1,4 +1,5 @@
 TARGET = batstat
+CFLAGS = -Wall -Wunused -Wextra 
 
 EXEC_PATH = /usr/bin
 CONFIG_DIR = /etc/batstat
@@ -11,10 +12,10 @@ OBJS = $(patsubst src/%.c,obj/%.o,$(SRCS))
 all: $(TARGET)
 
 $(TARGET): $(OBJS) 
-	gcc -o $(TARGET) $(OBJS)
+	gcc $(CFLAGS) -o $(TARGET) $(OBJS)
 
 obj/%.o: src/%.c | obj
-	gcc -c $< -o $@
+	gcc $(CFLAGS) -c $< -o $@
 
 # Ensure obj directory exists
 obj:

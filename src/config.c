@@ -22,15 +22,14 @@ int Config_Init(Config *conf, bool log) {
     if(log)
         printf("Config file founded.\n");
     char line[256];
-    char *n;
     SectionType currentSection = SectionNone;
-    const char *batteryPrefix = "[battery]";
-    const int batteryPrefixLen = strlen(batteryPrefix);
+    const char batteryPrefix[] = "[battery]";
+    const size_t batteryPrefixLen = strlen(batteryPrefix);
 
-    const char *pathPrefix = "path=";
-    const int pathPrefixLen = strlen(pathPrefix);
+    const char pathPrefix[] = "path=";
+    const size_t pathPrefixLen = strlen(pathPrefix);
 
-    while((n = fgets(line, 256, f)) > 0) {
+    while(fgets(line, 256, f) != NULL) {
         if(strncmp(line, batteryPrefix, batteryPrefixLen) == 0) {
             currentSection = SectionBattery;
         }
@@ -42,10 +41,13 @@ int Config_Init(Config *conf, bool log) {
                         line[i] = '\0';
                         
                     char *batteryPath = line + pathPrefixLen;
-                    conf->batteryPath = malloc(strlen(batteryPath));
+                    conf->batteryPath = malloc(strlen(batteryPath) + 10);
                     strcpy(conf->batteryPath, batteryPath);
                 }
                 break;
+            default:
+                break;
         }
     }
+    return 0;
 }
